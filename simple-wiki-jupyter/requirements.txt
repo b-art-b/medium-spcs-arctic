@@ -1,0 +1,10 @@
+JPype1
+jupyter
+pandas
+numpy
+seaborn
+scipy
+matplotlib
+seaborn
+pyNetLogo
+SALib

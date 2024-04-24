@@ -1,0 +1,39 @@
+spec:
+  containers:
+    - name: simple-wiki-jupyter-service-four-gpu
+      image: /containers_db/simple_wiki_search/images/simple-wiki-jupyter:dev
+      volumeMounts:
+        - name: models
+          mountPath: /home/jupyter/models
+        - name: notebooks
+          mountPath: /home/jupyter/notebooks
+        - name: data
+          mountPath: /home/jupyter/data
+      readinessProbe:
+        port: 8888
+        path: /
+      resources:
+        requests:
+          nvidia.com/gpu: 4
+        limits:
+          nvidia.com/gpu: 4
+  endpoints:
+    - name: simple-wiki-jupyter-service-four-gpu
+      port: 8888
+      public: true
+  volumes:
+    - name: models
+      source: "@models"
+      uid: 1000
+      gid: 1000
+    - name: notebooks
+      source: "@notebooks"
+      uid: 1000
+      gid: 1000
+    - name: data
+      source: "@data"
+      uid: 1000
+      gid: 1000
+  networkPolicyConfig:
+      allowInternetEgress: true
+

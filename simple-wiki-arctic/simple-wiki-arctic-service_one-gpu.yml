@@ -1,0 +1,28 @@
+spec:
+  containers:
+    - name: simple-wiki-service-arctic-one-gpu
+      image: /containers_db/simple_wiki_search/images/simple-wiki-arctic:dev
+      volumeMounts:
+        - name: models
+          mountPath: /root/models
+        - name: data
+          mountPath: /root/data
+      readinessProbe:
+        port: 80
+        path: /
+      resources:
+        requests:
+          nvidia.com/gpu: 1
+        limits:
+          nvidia.com/gpu: 1
+  endpoints:
+    - name: simple-wiki-arctic-service-one-gpu
+      port: 80
+      public: true
+  volumes:
+    - name: data
+      source: "@data"
+    - name: models
+      source: "@models"
+  networkPolicyConfig:
+      allowInternetEgress: true

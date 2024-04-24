@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  embed-base:
+    platform: linux/amd64
+    build:
+      context: ./embed-base
+      dockerfile: Dockerfile
+      args:
+        - IMAGE_TAG=latest
+    image: "embed-base:latest"
+
+  simple-wiki-job:
+    extends: embed-base
+    platform: linux/amd64
+    build:
+      context: ./simple-wiki-job
+      dockerfile: Dockerfile
+    image: "simple-wiki-job:dev"
+    volumes:
+      - "./mounted_dirs/models:/root/models"
+      - "./mounted_dirs/data:/root/data"
+
+  simple-wiki-job-sf:
+    extends: simple-wiki-job
+    image: "${SF_REPO}/simple-wiki-job:dev"
+
+  simple-wiki-arctic:
+    extends: embed-base
+    platform: linux/amd64
+    build:
+      context: ./simple-wiki-arctic
+      dockerfile: Dockerfile
+    image: "simple-wiki-arctic:dev"
+    ports:
+      - "8080:80"
+    volumes:
+      - "./mounted_dirs/models:/root/models"
+      - "./mounted_dirs/data:/root/data"
+
+  simple-wiki-arctic-sf:
+    extends: simple-wiki-arctic
+    image: "${SF_REPO}/simple-wiki-arctic:dev"

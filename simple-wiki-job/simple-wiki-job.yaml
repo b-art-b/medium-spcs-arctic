@@ -1,0 +1,27 @@
+spec:
+  container:
+    - name: main
+      image: /containers_db/simple_wiki_search/images/simple-wiki-job:dev
+      volumeMounts:
+        - name: models
+          mountPath: /root/models
+        - name: data
+          mountPath: /root/data
+      resources:
+        requests:
+          nvidia.com/gpu: 1
+        limits:
+          nvidia.com/gpu: 1
+      args:
+      - "--model-name=Snowflake/snowflake-arctic-embed-l"
+      - "--model-cache-dir=/root/models"
+      - "--data-dir=/root/data/workdir"
+      - "--embeddings-dir=/root/data/embeddings"
+      - "--save-single-pt"
+      - "--no-of-gpus=1"
+      - "--pt-file-prefix=ver1"
+  volumes:
+    - name: models
+      source: "@models"
+    - name: data
+      source: "@data"
